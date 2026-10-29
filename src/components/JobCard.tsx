@@ -1,4 +1,4 @@
-import type { Job } from "../types";
+import type { Job, Status } from "../types";
 
 const statusColors = {
   Applied: "#3b82f6",
@@ -7,12 +7,15 @@ const statusColors = {
   Rejected: "#ef4444",
 };
 
+const statusOptions: Status[] = ["Applied", "Interview", "Offer", "Rejected"];
+
 interface JobCardProps {
   job: Job;
   onDelete: (id: number) => void;
+  onStatusChange: (id: number, status: Status) => void;
 }
 
-function JobCard({ job, onDelete }: JobCardProps) {
+function JobCard({ job, onDelete, onStatusChange }: JobCardProps) {
   return (
     <div
       style={{
@@ -27,9 +30,17 @@ function JobCard({ job, onDelete }: JobCardProps) {
       <p>{job.role}</p>
       <p>
         Status:{" "}
-        <span style={{ color: statusColors[job.status], fontWeight: "bold" }}>
-          {job.status}
-        </span>
+        <select
+          value={job.status}
+          onChange={(e) => onStatusChange(job.id, e.target.value as Status)}
+          style={{ color: statusColors[job.status], fontWeight: "bold" }}
+        >
+          {statusOptions.map((s) => (
+            <option key={s} value={s}>
+              {s}
+            </option>
+          ))}
+        </select>
       </p>
       <p>Applied on: {job.date}</p>
       <button onClick={() => onDelete(job.id)}>Delete</button>

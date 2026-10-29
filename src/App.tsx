@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import JobCard from "./components/JobCard";
-import type { Job } from "./types";
+import type { Job, Status } from "./types";
 
 const initialJobs: Job[] = [
   {
@@ -67,6 +67,10 @@ function App() {
     setJobs(jobs.filter((job) => job.id !== id));
   }
 
+  function handleStatusChange(id: number, status: Status) {
+    setJobs(jobs.map((job) => (job.id === id ? { ...job, status } : job)));
+  }
+
   return (
     <div>
       <h1>Job Tracker</h1>
@@ -85,7 +89,12 @@ function App() {
       <button onClick={handleAdd}>Add Job</button>
 
       {jobs.map((job) => (
-                <JobCard key={job.id} job={job} onDelete={handleDelete} />
+        <JobCard
+          key={job.id}
+          job={job}
+          onDelete={handleDelete}
+          onStatusChange={handleStatusChange}
+        />
       ))}
     </div>
   );
