@@ -43,6 +43,8 @@ function App() {
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
 
+    const [filter, setFilter] = useState<Status | "All">("All");
+
   useEffect(() => {
   localStorage.setItem("jobs", JSON.stringify(jobs));
 }, [jobs]);
@@ -71,6 +73,13 @@ function App() {
     setJobs(jobs.map((job) => (job.id === id ? { ...job, status } : job)));
   }
 
+  const filteredJobs =
+    filter === "All" ? jobs : jobs.filter((job) => job.status === filter);
+
+  function count(status: Status) {
+    return jobs.filter((job) => job.status === status).length;
+  }
+
   return (
     <div>
       <h1>Job Tracker</h1>
@@ -88,7 +97,23 @@ function App() {
       />
       <button onClick={handleAdd}>Add Job</button>
 
-      {jobs.map((job) => (
+      <p>
+        Applied: {count("Applied")} | Interview: {count("Interview")} | Offer:{" "}
+        {count("Offer")} | Rejected: {count("Rejected")}
+      </p>
+
+      <select
+        value={filter}
+        onChange={(e) => setFilter(e.target.value as Status | "All")}
+      >
+        <option value="All">All</option>
+        <option value="Applied">Applied</option>
+        <option value="Interview">Interview</option>
+        <option value="Offer">Offer</option>
+        <option value="Rejected">Rejected</option>
+      </select>
+
+      {filteredJobs.map((job) => (
         <JobCard
           key={job.id}
           job={job}
