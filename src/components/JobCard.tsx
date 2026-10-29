@@ -9,9 +9,10 @@ const statusColors = {
 
 interface JobCardProps {
   job: Job;
+  onDelete: (id: number) => void;
 }
 
-function JobCard({ job }: JobCardProps) {
+function JobCard({ job, onDelete }: JobCardProps) {
   return (
     <div
       style={{
@@ -31,6 +32,7 @@ function JobCard({ job }: JobCardProps) {
         </span>
       </p>
       <p>Applied on: {job.date}</p>
+      <button onClick={() => onDelete(job.id)}>Delete</button>
     </div>
   );
 }
